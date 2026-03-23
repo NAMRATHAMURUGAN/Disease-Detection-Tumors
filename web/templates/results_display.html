@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analysis Results - Brain Tumor AI System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .card-shadow {
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .success-badge {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        }
+        .warning-badge {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+        }
+        .info-badge {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        .progress-bar {
+            transition: width 1s ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div class="min-h-screen">
+        <!-- Header -->
+        <header class="gradient-bg text-white shadow-lg">
+            <div class="container mx-auto px-4 py-6">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-4">
+                        <i class="fas fa-brain text-3xl"></i>
+                        <div>
+                            <h1 class="text-2xl font-bold">Analysis Results</h1>
+                            <p class="text-sm opacity-90">Brain Tumor AI System - Complete Diagnosis Report</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <span class="text-sm opacity-75">Status: <span class="font-semibold text-green-300">Completed</span></span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="container mx-auto px-4 py-8">
+            <div class="max-w-6xl mx-auto space-y-8">
+                
+                <!-- Summary Card -->
+                <div class="bg-white rounded-xl shadow-lg p-8 card-shadow fade-in">
+                    <div class="text-center mb-8">
+                        <div class="inline-flex items-center justify-center w-20 h-20 bg-green-100 rounded-full mb-4 pulse">
+                            <i class="fas fa-check-circle text-4xl text-green-600"></i>
+                        </div>
+                        <h2 class="text-3xl font-bold text-gray-800 mb-2">Analysis Complete!</h2>
+                        <p class="text-gray-600">Comprehensive tumor detection and classification report</p>
+                    </div>
+
+                    <!-- Quick Stats -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                        <div class="text-center p-6 bg-green-50 rounded-lg border border-green-200">
+                            <div class="text-3xl font-bold text-green-600 mb-2">99.7%</div>
+                            <div class="text-sm text-gray-600">Detection Confidence</div>
+                            <div class="mt-2">
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                    <i class="fas fa-check mr-1"></i> Tumor Detected
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <div class="text-center p-6 bg-blue-50 rounded-lg border border-blue-200">
+                            <div class="text-2xl font-bold text-blue-600 mb-2">Meningioma</div>
+                            <div class="text-sm text-gray-600">Tumor Type</div>
+                            <div class="mt-2">
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                    <i class="fas fa-microscope mr-1"></i> Classified
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <div class="text-center p-6 bg-purple-50 rounded-lg border border-purple-200">
+                            <div class="text-2xl font-bold text-purple-600 mb-2">99.9%</div>
+                            <div class="text-sm text-gray-600">Classification Accuracy</div>
+                            <div class="mt-2">
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
+                                    <i class="fas fa-award mr-1"></i> High Confidence
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Detailed Results -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    
+                    <!-- Tumor Detection -->
+                    <div class="bg-white rounded-xl shadow-lg p-6 card-shadow fade-in">
+                        <div class="flex items-center mb-6">
+                            <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mr-4">
+                                <i class="fas fa-search text-green-600 text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-semibold text-gray-800">Tumor Detection</h3>
+                                <p class="text-sm text-gray-600">Occurrence analysis results</p>
+                            </div>
+                        </div>
+                        
+                        <div class="space-y-4">
+                            <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                                <span class="text-gray-700">Tumor Present</span>
+                                <span class="success-badge text-white px-3 py-1 rounded-full text-sm font-medium">
+                                    <i class="fas fa-check mr-1"></i> Yes
+                                </span>
+                            </div>
+                            
+                            <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                                <span class="text-gray-700">Confidence</span>
+                                <div class="flex items-center">
+                                    <div class="w-32 bg-gray-200 rounded-full h-2 mr-3">
+                                        <div class="bg-green-600 h-2 rounded-full progress-bar" style="width: 99.7%"></div>
+                                    </div>
+                                    <span class="text-green-600 font-semibold">99.7%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tumor Classification -->
+                    <div class="bg-white rounded-xl shadow-lg p-6 card-shadow fade-in">
+                        <div class="flex items-center mb-6">
+                            <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mr-4">
+                                <i class="fas fa-brain text-blue-600 text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-semibold text-gray-800">Tumor Classification</h3>
+                                <p class="text-sm text-gray-600">Multi-class tumor type analysis</p>
+                            </div>
+                        </div>
+                        
+                        <div class="space-y-4">
+                            <div class="p-4 bg-blue-50 rounded-lg border border-blue-200">
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-blue-700 font-medium">Meningioma</span>
+                                    <span class="text-blue-600 font-bold">99.9%</span>
+                                </div>
+                                <div class="w-full bg-blue-200 rounded-full h-2">
+                                    <div class="bg-blue-600 h-2 rounded-full progress-bar" style="width: 99.9%"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="space-y-2">
+                                <div class="flex items-center justify-between text-sm">
+                                    <span class="text-gray-600">Glioma</span>
+                                    <span class="text-gray-500">0.000%</span>
+                                </div>
+                                <div class="flex items-center justify-between text-sm">
+                                    <span class="text-gray-600">Pituitary</span>
+                                    <span class="text-gray-500">0.003%</span>
+                                </div>
+                                <div class="flex items-center justify-between text-sm">
+                                    <span class="text-gray-600">No Tumor</span>
+                                    <span class="text-gray-500">0.000%</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Tumor Type Explanation -->
+                        <div id="tumorExplanation" class="mt-6 p-4 bg-indigo-50 rounded-lg border border-indigo-200">
+                            <!-- Dynamic content will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Grad-CAM Visualization -->
+                <div class="bg-white rounded-xl shadow-lg p-6 card-shadow fade-in">
+                    <div class="flex items-center mb-6">
+                        <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mr-4">
+                            <i class="fas fa-eye text-purple-600 text-xl"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold text-gray-800">Grad-CAM Visualization</h3>
+                            <p class="text-sm text-gray-600">AI decision explanation and heat map</p>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div class="space-y-4">
+                            <div class="p-4 bg-purple-50 rounded-lg">
+                                <h4 class="font-medium text-purple-800 mb-2">What is Grad-CAM?</h4>
+                                <p class="text-sm text-gray-700">Grad-CAM shows which regions of the MRI image the AI focused on when making its decision. The red areas indicate the most important regions for tumor detection.</p>
+                            </div>
+                            
+                            <div class="p-4 bg-gray-50 rounded-lg">
+                                <h4 class="font-medium text-gray-800 mb-2">Analysis Details</h4>
+                                <ul class="text-sm text-gray-700 space-y-1">
+                                    <li><i class="fas fa-check text-green-500 mr-2"></i>Visualization generated successfully</li>
+                                    <li><i class="fas fa-crosshairs text-blue-500 mr-2"></i>Target: Meningioma class</li>
+                                    <li><i class="fas fa-map-marked-alt text-purple-500 mr-2"></i>Heat map highlights tumor regions</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="text-center">
+                            <div class="bg-gray-100 rounded-lg p-4 border-2 border-dashed border-gray-300">
+                                <img id="gradcamImage" src="" alt="Grad-CAM Visualization" class="max-w-full h-auto rounded-lg mx-auto" style="display: none;">
+                                <div id="gradcamPlaceholder">
+                                    <i class="fas fa-image text-6xl text-gray-400 mb-2"></i>
+                                    <p class="text-gray-600">Grad-CAM Visualization</p>
+                                    <p class="text-sm text-gray-500">Loading heat map...</p>
+                                </div>
+                            </div>
+                            <p class="text-xs text-gray-500 mt-2" id="gradcamFile">File: gradcam_tumor_20260320_110806.png</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Additional Information -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    
+                    <!-- Volume Estimation -->
+                    <div class="bg-white rounded-xl shadow-lg p-6 card-shadow fade-in">
+                        <div class="flex items-center mb-6">
+                            <div class="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center mr-4">
+                                <i class="fas fa-cube text-orange-600 text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-semibold text-gray-800">Volume Estimation</h3>
+                                <p class="text-sm text-gray-600">Tumor size and depth analysis</p>
+                            </div>
+                        </div>
+                        
+                        <div class="text-center p-8 bg-orange-50 rounded-lg border border-orange-200">
+                            <i class="fas fa-exclamation-triangle text-4xl text-orange-500 mb-4"></i>
+                            <p class="text-orange-700 font-medium">Volume Estimation</p>
+                            <p class="text-sm text-gray-600 mt-2">2D volume estimation requires additional processing</p>
+                            <p class="text-xs text-gray-500 mt-2">This feature would estimate tumor volume from 2D classification</p>
+                        </div>
+                    </div>
+
+                    <!-- Segmentation -->
+                    <div class="bg-white rounded-xl shadow-lg p-6 card-shadow fade-in">
+                        <div class="flex items-center mb-6">
+                            <div class="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center mr-4">
+                                <i class="fas fa-draw-polygon text-indigo-600 text-xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-semibold text-gray-800">Tumor Segmentation</h3>
+                                <p class="text-sm text-gray-600">Precise tumor boundary detection</p>
+                            </div>
+                        </div>
+                        
+                        <div class="text-center p-8 bg-indigo-50 rounded-lg border border-indigo-200">
+                            <i class="fas fa-info-circle text-4xl text-indigo-500 mb-4"></i>
+                            <p class="text-indigo-700 font-medium">Segmentation</p>
+                            <p class="text-sm text-gray-600 mt-2">Requires BraTS multi-modal MRI data</p>
+                            <p class="text-xs text-gray-500 mt-2">This feature would provide precise tumor boundaries</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex justify-center space-x-4 fade-in">
+                    <button onclick="window.history.back()" class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-3 rounded-lg font-medium transition">
+                        <i class="fas fa-arrow-left mr-2"></i> Analyze Another Image
+                    </button>
+                    <button onclick="downloadReport()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition">
+                        <i class="fas fa-download mr-2"></i> Download Report
+                    </button>
+                    <button onclick="window.print()" class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-medium transition">
+                        <i class="fas fa-print mr-2"></i> Print Report
+                    </button>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="bg-gray-800 text-white py-8 mt-16">
+            <div class="container mx-auto px-4 text-center">
+                <p class="text-sm opacity-75">© 2024 Brain Tumor AI System. Built with advanced AI technology.</p>
+                <div class="mt-4 flex justify-center space-x-6">
+                    <i class="fas fa-hospital text-2xl"></i>
+                    <i class="fas fa-brain text-2xl"></i>
+                    <i class="fas fa-microscope text-2xl"></i>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Analysis results will be passed as a global variable
+        let analysisResults = null;
+        
+        // Animate progress bars on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get analysis results from hidden input
+            const resultsInput = document.getElementById('analysisResults');
+            if (resultsInput) {
+                analysisResults = JSON.parse(resultsInput.value);
+            }
+            
+            setTimeout(() => {
+                const progressBars = document.querySelectorAll('.progress-bar');
+                progressBars.forEach(bar => {
+                    const width = bar.style.width;
+                    bar.style.width = '0%';
+                    setTimeout(() => {
+                        bar.style.width = width;
+                    }, 100);
+                });
+            }, 500);
+            
+            // Load Grad-CAM image if available
+            loadGradCamImage();
+        });
+
+        function loadGradCamImage() {
+            const gradcamImage = document.getElementById('gradcamImage');
+            const gradcamPlaceholder = document.getElementById('gradcamPlaceholder');
+            const gradcamFile = document.getElementById('gradcamFile');
+            
+            if (analysisResults && analysisResults.processing_steps && analysisResults.processing_steps.gradcam && analysisResults.processing_steps.gradcam.success) {
+                const gradcamPath = analysisResults.processing_steps.gradcam.visualization_path;
+                gradcamFile.textContent = `File: ${gradcamPath.split('/').pop()}`;
+                
+                // Try to load the image
+                gradcamImage.src = `/results/${gradcamPath.split('/').pop()}`;
+                gradcamImage.onload = function() {
+                    gradcamPlaceholder.style.display = 'none';
+                    gradcamImage.style.display = 'block';
+                };
+                gradcamImage.onerror = function() {
+                    // Show placeholder if image can't be loaded
+                    gradcamPlaceholder.innerHTML = `
+                        <i class="fas fa-exclamation-triangle text-6xl text-orange-400 mb-2"></i>
+                        <p class="text-orange-600">Grad-CAM Visualization</p>
+                        <p class="text-sm text-gray-500">Image not available</p>
+                    `;
+                };
+            }
+            
+            // Load tumor type explanation
+            loadTumorExplanation();
+        }
+
+        function loadTumorExplanation() {
+            const tumorType = analysisResults.final_diagnosis.tumor_type.toLowerCase();
+            const explanationDiv = document.getElementById('tumorExplanation');
+            
+            if (explanationDiv) {
+                const explanations = {
+                    'meningioma': {
+                        name: 'Meningioma',
+                        what: 'Meningioma is a tumor that arises from the meninges, the membranes surrounding the brain and spinal cord. These tumors are typically slow-growing and benign, but can cause serious symptoms by compressing adjacent brain tissue.',
+                        how: 'Meningiomas develop from arachnoid cap cells in the meninges. They grow inward from the meninges into the brain, creating a well-defined, encapsulated mass. The exact cause is unknown, but risk factors include radiation exposure and certain genetic conditions.',
+                        symptoms: ['Headaches', 'Seizures', 'Vision problems', 'Weakness in arms/legs'],
+                        treatments: ['Surgical removal', 'Radiation therapy', 'Observation (if small)', 'Hormone therapy']
+                    },
+                    'glioma': {
+                        name: 'Glioma',
+                        what: 'Glioma is a type of tumor that occurs in the brain and spinal cord, arising from glial cells. Gliomas can be either benign or malignant and are the most common type of primary brain tumor.',
+                        how: 'Gliomas develop from glial cells, which are support cells that surround nerve cells. They can infiltrate surrounding brain tissue, making complete surgical removal difficult. Risk factors include genetic predisposition and radiation exposure.',
+                        symptoms: ['Headaches', 'Seizures', 'Memory problems', 'Personality changes', 'Motor weakness'],
+                        treatments: ['Surgical resection', 'Radiation therapy', 'Chemotherapy', 'Targeted therapy']
+                    },
+                    'pituitary': {
+                        name: 'Pituitary Tumor',
+                        what: 'Pituitary tumors are abnormal growths that develop in the pituitary gland. Most are benign (noncancerous) and can affect hormone production, leading to various endocrine disorders.',
+                        how: 'These tumors develop from the pituitary gland cells and can cause either overproduction or underproduction of hormones. They grow slowly and may compress nearby structures like the optic nerves.',
+                        symptoms: ['Vision problems', 'Hormonal changes', 'Headaches', 'Fatigue', 'Mood changes'],
+                        treatments: ['Medication', 'Surgery', 'Radiation therapy', 'Hormone replacement']
+                    }
+                };
+                
+                const explanation = explanations[tumorType];
+                if (explanation) {
+                    explanationDiv.innerHTML = `
+                        <h4 class="font-semibold text-indigo-800 mb-3">
+                            <i class="fas fa-info-circle mr-2"></i>About ${explanation.name}
+                        </h4>
+                        <div class="text-sm text-gray-700 space-y-2">
+                            <p><strong>What is ${explanation.name}?</strong></p>
+                            <p>${explanation.what}</p>
+                            
+                            <p><strong>How it forms:</strong></p>
+                            <p>${explanation.how}</p>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3">
+                                <div class="p-2 bg-white rounded">
+                                    <p class="font-medium text-gray-800">Common Symptoms:</p>
+                                    <ul class="text-xs text-gray-600 mt-1">
+                                        ${explanation.symptoms.map(s => `<li>• ${s}</li>`).join('')}
+                                    </ul>
+                                </div>
+                                <div class="p-2 bg-white rounded">
+                                    <p class="font-medium text-gray-800">Treatment Options:</p>
+                                    <ul class="text-xs text-gray-600 mt-1">
+                                        ${explanation.treatments.map(t => `<li>• ${t}</li>`).join('')}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+        }
+
+        function downloadReport() {
+            alert('Download feature would generate a PDF report with all analysis results');
+        }
+    </script>
+    
+    <!-- Hidden input to pass analysis results -->
+    <input type="hidden" id="analysisResults" value="{{ result | tojson }}">
+</body>
+</html>

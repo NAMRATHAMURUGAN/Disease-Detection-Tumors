@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brain Tumor AI System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/alpine.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .card-shadow {
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .loading-spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div x-data="brainTumorApp()">
+        
+        <!-- Header -->
+        <header class="gradient-bg text-white shadow-lg">
+            <div class="container mx-auto px-4 py-6">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-4">
+                        <i class="fas fa-brain text-3xl"></i>
+                        <div>
+                            <h1 class="text-2xl font-bold">Brain Tumor AI System</h1>
+                            <p class="text-sm opacity-90">Advanced Medical AI for Tumor Detection & Analysis</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <div class="text-right">
+                            <p class="text-sm opacity-90">System Status</p>
+                            <p class="text-lg font-semibold">
+                                <span x-show="systemStatus" 
+                                      :class="systemStatus && systemStatus.pipeline_loaded ? 'text-green-300' : 'text-yellow-300'"
+                                      x-text="systemStatus ? (systemStatus.pipeline_loaded ? 'Online' : 'Models Missing') : 'Checking...'">
+                                </span>
+                            </p>
+                        </div>
+                        <button @click="checkSystemStatus()" class="bg-white bg-opacity-20 hover:bg-opacity-30 px-4 py-2 rounded-lg transition">
+                            <i class="fas fa-sync-alt"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="container mx-auto px-4 py-8">
+            
+            <!-- Upload Section -->
+            <div class="max-w-4xl mx-auto">
+                <div class="bg-white rounded-2xl card-shadow p-8 mb-8">
+                    <div class="text-center mb-8">
+                        <h2 class="text-3xl font-bold text-gray-800 mb-4">
+                            <i class="fas fa-upload text-blue-600 mr-3"></i>
+                            Upload MRI Image
+                        </h2>
+                        <p class="text-gray-600">
+                            Upload a brain MRI image for comprehensive AI analysis including tumor detection, classification, and volume estimation.
+                        </p>
+                    </div>
+
+                    <!-- Upload Area -->
+                    <div class="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:border-blue-400 transition-colors"
+                         @drop.prevent="handleDrop($event)"
+                         @dragover.prevent="dragover = true"
+                         @dragleave.prevent="dragover = false"
+                         :class="dragover ? 'border-blue-400 bg-blue-50' : ''">
+                        
+                        <div x-show="!uploadedImage && !isAnalyzing">
+                            <i class="fas fa-cloud-upload-alt text-6xl text-gray-400 mb-4"></i>
+                            <p class="text-xl text-gray-600 mb-2">Drag & Drop MRI Image Here</p>
+                            <p class="text-gray-500 mb-4">or</p>
+                            <label class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg cursor-pointer transition">
+                                <i class="fas fa-folder-open mr-2"></i>
+                                Browse Files
+                                <input type="file" accept="image/*" @change="handleFileSelect($event)" class="hidden">
+                            </label>
+                            <p class="text-sm text-gray-500 mt-4">Supported formats: JPG, PNG, BMP</p>
+                        </div>
+
+                        <!-- Image Preview -->
+                        <div x-show="uploadedImage && !isAnalyzing" class="fade-in">
+                            <img :src="uploadedImage" alt="Uploaded MRI" class="max-h-64 mx-auto rounded-lg shadow-md">
+                            <p class="text-green-600 font-semibold mt-4">
+                                <i class="fas fa-check-circle mr-2"></i>Image uploaded successfully!
+                            </p>
+                            <button @click="uploadedImage = null" class="mt-4 text-gray-500 hover:text-gray-700">
+                                <i class="fas fa-times mr-2"></i>Remove image
+                            </button>
+                        </div>
+
+                        <!-- Analyzing State -->
+                        <div x-show="isAnalyzing" class="fade-in">
+                            <div class="loading-spinner mx-auto mb-4"></div>
+                            <p class="text-lg text-gray-700 font-semibold">Analyzing MRI...</p>
+                            <p class="text-gray-500">Please wait while our AI processes your image</p>
+                            <div class="mt-4 space-y-2">
+                                <div class="flex items-center justify-center">
+                                    <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                                    <span class="text-sm">Tumor detection</span>
+                                </div>
+                                <div class="flex items-center justify-center">
+                                    <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                                    <span class="text-sm">Type classification</span>
+                                </div>
+                                <div class="flex items-center justify-center">
+                                    <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                                    <span class="text-sm">Grad-CAM visualization</span>
+                                </div>
+                                <div class="flex items-center justify-center">
+                                    <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                                    <span class="text-sm">Volume estimation</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Analyze Button -->
+                    <div class="text-center mt-8">
+                        <button @click="analyzeImage()" 
+                                :disabled="!uploadedImage || isAnalyzing"
+                                :class="!uploadedImage || isAnalyzing ? 'bg-gray-400 cursor-not-allowed' : 'bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-4 rounded-lg font-semibold text-lg transition transform hover:scale-105'"
+                                class="shadow-lg">
+                            <i class="fas fa-brain mr-2"></i>
+                            <span x-show="!isAnalyzing">Analyze with AI</span>
+                            <span x-show="isAnalyzing">Analyzing...</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Error Message -->
+                <div x-show="error" class="bg-red-50 border border-red-200 rounded-lg p-4 mb-8 fade-in">
+                    <div class="flex items-center">
+                        <i class="fas fa-exclamation-triangle text-red-500 mr-3"></i>
+                        <p class="text-red-700" x-text="error"></p>
+                    </div>
+                </div>
+
+                <!-- Results Section -->
+                <div x-show="showResults && analysisResult" class="fade-in">
+                    <div class="bg-white rounded-2xl card-shadow p-8">
+                        <h2 class="text-2xl font-bold text-gray-800 mb-6">
+                            <i class="fas fa-microscope text-blue-600 mr-2"></i>
+                            Analysis Results
+                        </h2>
+
+                        <!-- Final Diagnosis -->
+                        <div class="bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl p-6 mb-6">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-4">Final Diagnosis</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div class="text-center">
+                                    <p class="text-sm text-gray-600">Tumor Detected</p>
+                                    <p class="text-2xl font-bold"
+                                       :class="analysisResult.final_diagnosis.tumor_detected ? 'text-red-600' : 'text-green-600'">
+                                        <span x-text="analysisResult.final_diagnosis.tumor_detected ? 'Yes' : 'No'"></span>
+                                    </p>
+                                </div>
+                                <div class="text-center" x-show="analysisResult.final_diagnosis.tumor_detected">
+                                    <p class="text-sm text-gray-600">Tumor Type</p>
+                                    <p class="text-2xl font-bold text-blue-600" 
+                                       x-text="analysisResult.final_diagnosis.tumor_type || 'Unknown'"></p>
+                                </div>
+                                <div class="text-center">
+                                    <p class="text-sm text-gray-600">Confidence</p>
+                                    <p class="text-2xl font-bold text-purple-600">
+                                        <span x-text="(analysisResult.final_diagnosis.confidence * 100).toFixed(1) + '%'"></span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Detailed Results -->
+                        <div class="space-y-6">
+                            <!-- Classification Results -->
+                            <div x-show="analysisResult.processing_steps.classification" 
+                                 class="border-l-4 border-blue-500 pl-6">
+                                <h3 class="text-lg font-semibold text-gray-800 mb-3">
+                                    <i class="fas fa-brain text-blue-600 mr-2"></i>
+                                    Tumor Classification
+                                </h3>
+                                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                    <template x-for="[className, prob] in Object.entries(analysisResult.processing_steps.classification.probabilities || {})">
+                                        <div class="text-center p-3 bg-gray-50 rounded-lg">
+                                            <p class="text-sm font-medium capitalize" x-text="className"></p>
+                                            <p class="text-lg font-bold text-gray-800" x-text="(prob * 100).toFixed(1) + '%'"></p>
+                                        </div>
+                                    </template>
+                                </div>
+                            </div>
+
+                            <!-- Volume Results -->
+                            <div x-show="analysisResult.processing_steps.volume && analysisResult.processing_steps.volume.success" 
+                                 class="border-l-4 border-green-500 pl-6">
+                                <h3 class="text-lg font-semibold text-gray-800 mb-3">
+                                    <i class="fas fa-cube text-green-600 mr-2"></i>
+                                    Tumor Metrics
+                                </h3>
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                    <div class="text-center p-4 bg-green-50 rounded-lg">
+                                        <p class="text-sm text-gray-600">Tumor Volume</p>
+                                        <p class="text-xl font-bold text-green-600">
+                                            <span x-text="(analysisResult.processing_steps.volume.tumor_volume_mm3 / 1000).toFixed(2) + ' cm³'"></span>
+                                        </p>
+                                    </div>
+                                    <div class="text-center p-4 bg-blue-50 rounded-lg">
+                                        <p class="text-sm text-gray-600">Tumor Slices</p>
+                                        <p class="text-xl font-bold text-blue-600" 
+                                           x-text="analysisResult.processing_steps.volume.tumor_slices"></p>
+                                    </div>
+                                    <div class="text-center p-4 bg-purple-50 rounded-lg">
+                                        <p class="text-sm text-gray-600">Max Depth</p>
+                                        <p class="text-xl font-bold text-purple-600">
+                                            <span x-text="analysisResult.processing_steps.volume.tumor_depth_mm.max_depth_mm.toFixed(1) + ' mm'"></span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Survival Prediction -->
+                            <div x-show="analysisResult.processing_steps.survival && analysisResult.processing_steps.survival.success" 
+                                 class="border-l-4 border-purple-500 pl-6">
+                                <h3 class="text-lg font-semibold text-gray-800 mb-3">
+                                    <i class="fas fa-heartbeat text-purple-600 mr-2"></i>
+                                    Survival Prediction
+                                </h3>
+                                <div class="bg-purple-50 rounded-lg p-6">
+                                    <div class="text-center">
+                                        <p class="text-sm text-gray-600 mb-2">Estimated Survival</p>
+                                        <p class="text-3xl font-bold text-purple-600">
+                                            <span x-text="Math.round(analysisResult.processing_steps.survival.predicted_survival_days / 30) + ' months'"></span>
+                                        </p>
+                                        <p class="text-sm text-gray-500 mt-2">
+                                            <span x-text="analysisResult.processing_steps.survival.predicted_survival_days + ' days'"></span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Download Button -->
+                        <div class="text-center mt-8">
+                            <button @click="downloadResults()" 
+                                    class="bg-gradient-to-r from-green-600 to-teal-600 hover:from-green-700 hover:to-teal-700 text-white px-6 py-3 rounded-lg font-semibold transition transform hover:scale-105">
+                                <i class="fas fa-download mr-2"></i>
+                                Download Full Report
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="bg-gray-800 text-white py-8 mt-16">
+            <div class="container mx-auto px-4 text-center">
+                <p class="text-lg font-semibold mb-2">Brain Tumor AI System</p>
+                <p class="text-gray-400">Advanced Medical AI for Brain Tumor Detection and Analysis</p>
+                <div class="mt-4 flex justify-center space-x-6">
+                    <i class="fas fa-hospital text-2xl"></i>
+                    <i class="fas fa-brain text-2xl"></i>
+                    <i class="fas fa-microscope text-2xl"></i>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('brainTumorApp', () => ({
+                uploadedImage: null,
+                isAnalyzing: false,
+                analysisId: null,
+                analysisResult: null,
+                error: null,
+                systemStatus: null,
+                showResults: false,
+                dragover: false,
+                
+                init() {
+                    this.checkSystemStatus();
+                },
+                
+                checkSystemStatus() {
+                    fetch('/api/status')
+                        .then(response => response.json())
+                        .then(data => {
+                            this.systemStatus = data;
+                        })
+                        .catch(error => {
+                            console.error('Error checking system status:', error);
+                            this.systemStatus = { pipeline_loaded: false };
+                        });
+                },
+
+                handleDrop(event) {
+                    event.preventDefault();
+                    const files = event.dataTransfer.files;
+                    if (files.length > 0) {
+                        this.handleFile(files[0]);
+                    }
+                },
+
+                handleFileSelect(event) {
+                    const files = event.target.files;
+                    if (files.length > 0) {
+                        this.handleFile(files[0]);
+                    }
+                },
+
+                handleFile(file) {
+                    if (!file.type.startsWith('image/')) {
+                        this.error = 'Please upload an image file (JPG, PNG, BMP)';
+                        return;
+                    }
+
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        this.uploadedImage = e.target.result;
+                        this.error = null;
+                        console.log('Image uploaded successfully');
+                    };
+                    reader.readAsDataURL(file);
+                },
+
+                async analyzeImage() {
+                    if (!this.uploadedImage) {
+                        console.log('No image uploaded');
+                        return;
+                    }
+
+                    console.log('Starting analysis...');
+                    this.isAnalyzing = true;
+                    this.error = null;
+                    this.showResults = false;
+
+                    try {
+                        // Convert base64 to blob
+                        const base64Data = this.uploadedImage.split(',')[1];
+                        const byteCharacters = atob(base64Data);
+                        const byteNumbers = new Array(byteCharacters.length);
+                        for (let i = 0; i < byteCharacters.length; i++) {
+                            byteNumbers[i] = byteCharacters.charCodeAt(i);
+                        }
+                        const byteArray = new Uint8Array(byteNumbers);
+                        const blob = new Blob([byteArray], { type: 'image/jpeg' });
+
+                        // Create form data
+                        const formData = new FormData();
+                        formData.append('file', blob, 'mri_image.jpg');
+
+                        // Send to API
+                        const response = await fetch('/api/analyze', {
+                            method: 'POST',
+                            body: formData
+                        });
+
+                        const result = await response.json();
+
+                        if (response.ok) {
+                            this.analysisId = result.analysis_id;
+                            // Poll for results
+                            this.pollResults();
+                        } else {
+                            throw new Error(result.detail || 'Analysis failed');
+                        }
+
+                    } catch (error) {
+                        console.error('Analysis error:', error);
+                        this.error = 'Analysis failed: ' + error.message;
+                        this.isAnalyzing = false;
+                    }
+                },
+
+                async pollResults() {
+                    if (!this.analysisId) return;
+
+                    try {
+                        const response = await fetch(`/api/status/${this.analysisId}`);
+                        const result = await response.json();
+
+                        if (response.ok) {
+                            if (result.status === 'completed') {
+                                // Analysis complete
+                                this.analysisResult = result.result;
+                                this.isAnalyzing = false;
+                                this.showResults = true;
+                            } else {
+                                // Still processing, poll again
+                                setTimeout(() => this.pollResults(), 1000);
+                            }
+                        } else {
+                            throw new Error('Failed to get results');
+                        }
+
+                    } catch (error) {
+                        console.error('Error polling results:', error);
+                        this.error = 'Error retrieving results';
+                        this.isAnalyzing = false;
+                    }
+                }
+            }))
+        });
+
+        async function downloadResults() {
+            if (!this.analysisId) return;
+
+            try {
+                const response = await fetch(`/api/download/${this.analysisId}`);
+                const blob = await response.blob();
+                
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `brain_tumor_analysis_${this.analysisId}.json`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+
+            } catch (error) {
+                console.error('Download error:', error);
+                this.error = 'Failed to download results';
+            }
+        }
+    </script>
+</body>
+</html>
